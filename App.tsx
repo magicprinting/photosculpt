@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Mail, 
   ExternalLink, 
   Copy, 
   ArrowRight,
-  Box,
-  Menu,
-  X
+  Box
 } from 'lucide-react';
 
 // --- CUSTOM LOGO COMPONENT ---
