@@ -21,16 +21,10 @@ Run these commands in your terminal:
 npm install
 
 # 2. Install specific packages for this app
-npm install lucide-react @google/genai
+npm install lucide-react
 ```
 
-### 3. Environment Variables
-Create a `.env` file in the root directory:
-```
-VITE_API_KEY=your_google_gemini_api_key_here
-```
-
-### 4. Start the App
+### 3. Start the App
 ```bash
 npm run dev
 ```

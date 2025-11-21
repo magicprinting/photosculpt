@@ -11,7 +11,6 @@ interface ReviewStepProps {
 
 export const ReviewStep: React.FC<ReviewStepProps> = ({ orderData, onBack, onConfirm, isSubmitting = false }) => {
   const VENMO_HANDLE = "@tsufy";
-  // Venmo web links can vary, usually just venmo.com/u/username or similar
   const VENMO_LINK = `https://venmo.com/u/${VENMO_HANDLE.replace('@', '')}`;
 
   return (
@@ -32,9 +31,9 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({ orderData, onBack, onCon
              />
            )}
            <div className="flex-1">
-             <h3 className="font-semibold text-slate-800">Custom 3D Lithophane</h3>
-             <p className="text-sm text-slate-500 mt-1">Size: 4" x 6"</p>
-             <p className="text-sm text-slate-500">Material: PLA White</p>
+             <h3 className="font-semibold text-slate-800">Custom 3D Figurine</h3>
+             <p className="text-sm text-slate-500 mt-1">Height: Approx 4"</p>
+             <p className="text-sm text-slate-500">Material: Solid PLA/Resin</p>
            </div>
            <div className="text-right">
              <span className="block font-bold text-slate-800 text-lg">${orderData.price.toFixed(2)}</span>

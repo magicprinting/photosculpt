@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { OrderData } from '../types';
-import { analyzeImageForPrint, fileToBase64 } from '../services/geminiService';
-import { Loader2, Upload, CheckCircle, Sparkles, AlertCircle } from 'lucide-react';
+import { fileToBase64 } from '../services/geminiService';
+import { Loader2, Upload, AlertCircle } from 'lucide-react';
 
 interface UploadStepProps {
   orderData: OrderData;
@@ -11,7 +11,6 @@ interface UploadStepProps {
 }
 
 export const UploadStep: React.FC<UploadStepProps> = ({ orderData, updateOrder, onNext, onBack }) => {
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,21 +35,8 @@ export const UploadStep: React.FC<UploadStepProps> = ({ orderData, updateOrder, 
     updateOrder({
       imageFile: file,
       imagePreviewUrl: previewUrl,
-      aiAnalysis: null // Reset previous analysis
+      aiAnalysis: "Ready for print" 
     });
-
-    // Trigger AI Analysis
-    setIsAnalyzing(true);
-    try {
-      const base64 = await fileToBase64(file);
-      const analysis = await analyzeImageForPrint(base64, file.type);
-      updateOrder({ aiAnalysis: analysis });
-    } catch (err) {
-      console.error(err);
-      setError("Failed to analyze image. You can still proceed.");
-    } finally {
-      setIsAnalyzing(false);
-    }
   };
 
   const triggerFileInput = () => {
@@ -61,7 +47,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({ orderData, updateOrder, 
     <div className="space-y-6 animate-fade-in">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold text-slate-800">Upload Your Photo</h2>
-        <p className="text-slate-500">We'll analyze it for the best 3D print quality.</p>
+        <p className="text-slate-500">Select the photo you want transformed into a 3D Lithophane.</p>
       </div>
 
       <div className="flex flex-col items-center justify-center">
@@ -107,27 +93,6 @@ export const UploadStep: React.FC<UploadStepProps> = ({ orderData, updateOrder, 
         </div>
       )}
 
-      {/* AI Analysis Section */}
-      {(isAnalyzing || orderData.aiAnalysis) && (
-        <div className={`p-5 rounded-xl border ${isAnalyzing ? 'bg-indigo-50 border-indigo-100' : 'bg-emerald-50 border-emerald-100'} transition-all duration-500`}>
-          <div className="flex items-start gap-3">
-            {isAnalyzing ? (
-              <Sparkles className="w-5 h-5 text-indigo-600 animate-pulse mt-0.5" />
-            ) : (
-              <CheckCircle className="w-5 h-5 text-emerald-600 mt-0.5" />
-            )}
-            <div className="space-y-1">
-              <h3 className={`font-semibold ${isAnalyzing ? 'text-indigo-800' : 'text-emerald-800'}`}>
-                {isAnalyzing ? 'Gemini AI is analyzing geometry...' : 'Printability Analysis'}
-              </h3>
-              <p className={`text-sm leading-relaxed ${isAnalyzing ? 'text-indigo-600' : 'text-emerald-700'}`}>
-                {isAnalyzing ? 'Detecting edges, contrast, and depth maps for optimal 3D conversion.' : orderData.aiAnalysis}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="flex gap-4 pt-4">
         <button 
           onClick={onBack}
@@ -137,10 +102,10 @@ export const UploadStep: React.FC<UploadStepProps> = ({ orderData, updateOrder, 
         </button>
         <button 
           onClick={onNext}
-          disabled={!orderData.imageFile || isAnalyzing}
+          disabled={!orderData.imageFile}
           className="flex-1 py-3 px-6 rounded-lg bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
         >
-          {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Continue to Address'}
+          Continue to Address
         </button>
       </div>
     </div>

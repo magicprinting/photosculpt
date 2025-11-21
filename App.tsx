@@ -3,18 +3,33 @@ import {
   Mail, 
   ExternalLink, 
   Copy, 
-  Smartphone, 
-  Printer, 
-  Sun,
-  Image as ImageIcon,
-  CreditCard,
   ArrowRight,
-  CheckCircle2,
-  Sparkles,
+  Box,
   Menu,
-  X,
-  Box
+  X
 } from 'lucide-react';
+
+// --- CUSTOM LOGO COMPONENT ---
+const DoodleCubeIcon = ({ className }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2.5" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    {/* Front Face */}
+    <rect x="3" y="7" width="14" height="14" rx="2" />
+    {/* Back Face Lines (The 'Doodle' look) */}
+    <path d="M7 7l4-4" />
+    <path d="M17 7l4-4" />
+    <path d="M17 21l4-4" />
+    {/* Back Face partial rect to complete the illusion */}
+    <path d="M11 3h10v14" />
+  </svg>
+);
 
 // --- ANIMATION COMPONENT ---
 const ProcessAnimation = () => {
@@ -23,7 +38,7 @@ const ProcessAnimation = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setStep((prev) => (prev + 1) % 3);
-    }, 3500); // Slightly slower to let users see the detail
+    }, 3500); 
     return () => clearInterval(timer);
   }, []);
 
@@ -50,39 +65,38 @@ const ProcessAnimation = () => {
               </div>
               <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
             </div>
-            <p className="mt-4 font-bold text-white text-sm tracking-wide uppercase text-xs">1. You Snap It</p>
+            <p className="mt-4 font-bold text-white text-sm tracking-wide uppercase text-xs">1. You Send Photo</p>
           </div>
         </div>
 
-        {/* STEP 2: PRINT */}
+        {/* STEP 2: MODELING */}
         <div className={`transition-all duration-700 absolute transform ${step === 1 ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-90 translate-x-10'}`}>
            <div className="flex flex-col items-center">
-             <div className="relative w-32 h-32 bg-slate-800/80 rounded-xl border border-slate-700 flex items-end justify-center pb-4 overflow-hidden shadow-inner">
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-10 bg-slate-400 z-10 animate-[bounce_1s_infinite]"></div>
-               {/* Nozzle */}
-               <div className="absolute top-8 left-1/2 -translate-x-1/2 w-6 h-4 bg-indigo-600 rounded-b-lg z-10"></div>
-               {/* Building the object */}
-               <div className="w-20 bg-white/90 transition-all duration-[3000ms] ease-linear rounded-sm shadow-[0_0_15px_rgba(255,255,255,0.3)]" style={{ height: step === 1 ? '60%' : '0%' }}></div>
+             <div className="relative w-32 h-32 bg-slate-800/80 rounded-xl border border-slate-700 flex items-center justify-center overflow-hidden shadow-inner">
+               {/* Wireframe scanning effect */}
+               <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(99,102,241,0.5)_50%)] bg-[length:100%_4px] animate-scan"></div>
+               <Box className="w-16 h-16 text-indigo-400 animate-pulse" />
              </div>
-             <p className="mt-4 font-bold text-white text-sm tracking-wide uppercase text-xs">2. We Print It</p>
+             <p className="mt-4 font-bold text-white text-sm tracking-wide uppercase text-xs">2. We Model It</p>
            </div>
         </div>
 
-        {/* STEP 3: REVEAL (LITHOPHANE EFFECT) */}
+        {/* STEP 3: THE PHYSICAL OBJECT */}
         <div className={`transition-all duration-700 absolute transform ${step === 2 ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-90 translate-x-10'}`}>
           <div className="flex flex-col items-center">
-            <div className="relative w-28 h-36 bg-slate-800 rounded-lg border-4 border-slate-700 flex items-center justify-center shadow-2xl overflow-hidden group">
-              {/* The Result: A white statue/print of the dog */}
+            <div className="relative w-28 h-36 flex items-center justify-center group">
+              {/* The Result: A statue/print of the dog */}
+              <div className="absolute bottom-0 w-24 h-4 bg-black/50 blur-md rounded-full"></div>
               <img 
-                src="https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?auto=format&fit=crop&q=80&w=300" 
-                className="absolute inset-0 w-full h-full object-cover brightness-110 contrast-125 group-hover:opacity-100 transition-opacity duration-500" 
-                alt="3D Printed Dog"
+                src="https://images.unsplash.com/photo-1589929605995-d59479012d0c?auto=format&fit=crop&q=80&w=300" 
+                className="relative w-full h-full object-cover drop-shadow-2xl filter contrast-125" 
+                style={{ clipPath: 'polygon(10% 0, 90% 0, 100% 100%, 0% 100%)' }} // Slight trapezoid to fake a standing object
+                alt="3D Printed Dog Statue"
               />
-              {/* Backlight Glow Simulation */}
-              <div className="absolute inset-0 bg-gradient-to-t from-amber-500/20 via-transparent to-transparent mix-blend-overlay animate-pulse"></div>
-              <Sun className="absolute top-2 right-2 w-5 h-5 text-amber-200 animate-pulse shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
+              {/* Sparkles */}
+              <div className="absolute -top-2 -right-2 text-yellow-400 animate-bounce">✨</div>
             </div>
-            <p className="mt-4 font-bold text-amber-200 text-sm tracking-wide uppercase text-xs shadow-black drop-shadow-md">3. Magic Reveal</p>
+            <p className="mt-4 font-bold text-indigo-200 text-sm tracking-wide uppercase text-xs shadow-black drop-shadow-md">3. Real 3D Statue</p>
           </div>
         </div>
 
@@ -108,7 +122,6 @@ export default function App() {
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    // Simple visual feedback could go here
     alert(`${label} copied!`);
   };
 
@@ -123,12 +136,12 @@ export default function App() {
         </div>
         
         <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
-          Your photos, <br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">physically sculpted.</span>
+          From flat photo <br/>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">to physical object.</span>
         </h1>
         
         <p className="text-base md:text-lg text-slate-600 max-w-md mx-auto md:mx-0 leading-relaxed">
-          We turn digital memories into <strong>Lithophanes</strong>—3D printed porcelain-like art that reveals your photo when backlit by the sun or a lamp.
+          Send us a picture of your pet, your house, or your best friend. We'll 3D print a <strong>tangible, custom figurine</strong> or model that you can hold in your hands.
         </p>
         
         <div className="flex items-center justify-center md:justify-start gap-3 pt-2">
@@ -136,7 +149,7 @@ export default function App() {
             onClick={() => setActiveTab('ORDER')}
             className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all flex items-center gap-2"
           >
-            Create Yours <ArrowRight className="w-4 h-4" />
+            Create a Statue <ArrowRight className="w-4 h-4" />
           </button>
           <button 
             onClick={() => setActiveTab('GALLERY')}
@@ -156,58 +169,55 @@ export default function App() {
   const GalleryView = () => (
     <div className="w-full max-w-5xl space-y-6 animate-fade-in flex flex-col h-full justify-center">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl md:text-3xl font-bold text-slate-900">It's Not Just a Photo. It's a Sculpture.</h2>
-        <p className="text-slate-500">Precision 3D printed layers create depth and detail.</p>
+        <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Turn Memories into Miniatures</h2>
+        <p className="text-slate-500">We don't just print photos. We create physical objects.</p>
       </div>
 
       {/* Horizontal Scroll Container for Mobile, Grid for Desktop */}
       <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 px-4 md:px-0 -mx-4 md:mx-0 scrollbar-hide">
         
-        {/* Card 1: Portrait / Bust */}
-        <div className="min-w-[260px] md:min-w-0 flex-1 snap-center relative rounded-2xl overflow-hidden bg-slate-900 aspect-[3/4] md:aspect-[4/5] shadow-md group">
-          {/* Using a classical bust to simulate the white PLA look */}
+        {/* Card 1: Custom Figurines */}
+        <div className="min-w-[260px] md:min-w-0 flex-1 snap-center relative rounded-2xl overflow-hidden bg-slate-100 aspect-[3/4] md:aspect-[4/5] shadow-md group">
           <img 
-            src="https://images.unsplash.com/photo-1574352066332-55a54e8971e2?auto=format&fit=crop&q=80&w=600" 
+            src="https://images.unsplash.com/photo-1544164559-3a375f8892f1?auto=format&fit=crop&q=80&w=600" 
             alt="Sculpted Portrait" 
-            className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent flex items-end p-5">
             <div className="text-white">
-              <h3 className="font-bold text-lg">Family Portraits</h3>
-              <p className="text-slate-300 text-xs mt-1">Your favorite faces, etched in physical relief.</p>
+              <h3 className="font-bold text-lg">Custom Figurines</h3>
+              <p className="text-slate-300 text-xs mt-1">Turn a person into a 3D printed statue.</p>
             </div>
           </div>
         </div>
 
-        {/* Card 2: Pet / Statue */}
-        <div className="min-w-[260px] md:min-w-0 flex-1 snap-center relative rounded-2xl overflow-hidden bg-slate-900 aspect-[3/4] md:aspect-[4/5] shadow-md ring-4 ring-indigo-50 group">
-          {/* Using a ceramic dog to simulate the print */}
+        {/* Card 2: Pet Statues */}
+        <div className="min-w-[260px] md:min-w-0 flex-1 snap-center relative rounded-2xl overflow-hidden bg-white aspect-[3/4] md:aspect-[4/5] shadow-md ring-4 ring-indigo-50 group">
           <img 
-            src="https://images.unsplash.com/photo-1589929605995-d59479012d0c?auto=format&fit=crop&q=80&w=600" 
+            src="https://images.unsplash.com/photo-1633516496530-39c384f73863?auto=format&fit=crop&q=80&w=600" 
             alt="3D Printed Pet" 
-            className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
           />
-          <div className="absolute top-3 right-3 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">Most Popular</div>
+          <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-md border border-slate-200 text-slate-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Most Popular</div>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent flex items-end p-5">
             <div className="text-white">
-              <h3 className="font-bold text-lg">Pet Memorials</h3>
-              <p className="text-slate-300 text-xs mt-1">Immortalize them in durable, solid form.</p>
+              <h3 className="font-bold text-lg">Pet Statues</h3>
+              <p className="text-slate-300 text-xs mt-1">A solid model of your furry friend.</p>
             </div>
           </div>
         </div>
 
-        {/* Card 3: Landscape / Topography */}
-        <div className="min-w-[260px] md:min-w-0 flex-1 snap-center relative rounded-2xl overflow-hidden bg-slate-900 aspect-[3/4] md:aspect-[4/5] shadow-md group">
-          {/* Using a white snowy relief map texture to simulate landscape print */}
+        {/* Card 3: Scale Models */}
+        <div className="min-w-[260px] md:min-w-0 flex-1 snap-center relative rounded-2xl overflow-hidden bg-slate-100 aspect-[3/4] md:aspect-[4/5] shadow-md group">
           <img 
-            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600" 
-            alt="Topographical Landscape" 
-            className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 grayscale contrast-125" 
+            src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=600" 
+            alt="House Model" 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent flex items-end p-5">
             <div className="text-white">
-              <h3 className="font-bold text-lg">Landscapes</h3>
-              <p className="text-slate-300 text-xs mt-1">Feel the texture of the mountains.</p>
+              <h3 className="font-bold text-lg">Scale Models</h3>
+              <p className="text-slate-300 text-xs mt-1">Your house or car as a miniature model.</p>
             </div>
           </div>
         </div>
@@ -220,12 +230,12 @@ export default function App() {
            <span className="text-xs font-semibold text-slate-700">Solid 3D Print</span>
          </div>
          <div className="flex flex-col items-center gap-1">
-           <ImageIcon className="w-5 h-5 text-indigo-500" />
-           <span className="text-xs font-semibold text-slate-700">4" x 6" Standard</span>
+           <span className="w-5 h-5 flex items-center justify-center font-bold text-indigo-500 text-sm border border-indigo-500 rounded">4"</span>
+           <span className="text-xs font-semibold text-slate-700">Standard Height</span>
          </div>
          <div className="flex flex-col items-center gap-1">
-           <Sun className="w-5 h-5 text-indigo-500" />
-           <span className="text-xs font-semibold text-slate-700">Light Reveal</span>
+           <Box className="w-5 h-5 text-indigo-500" />
+           <span className="text-xs font-semibold text-slate-700">Tangible Object</span>
          </div>
       </div>
       
@@ -244,9 +254,9 @@ export default function App() {
         {/* Header Side (Mobile Top / Desktop Left) */}
         <div className="bg-slate-900 p-6 md:p-10 flex flex-col justify-center md:w-1/3 text-center md:text-left">
            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Get Started</h2>
-           <p className="text-slate-400 text-sm mb-6">Follow these steps to order your custom print.</p>
+           <p className="text-slate-400 text-sm mb-6">Order your custom 3D figurine today.</p>
            <div className="inline-block bg-slate-800 rounded-lg p-3 border border-slate-700">
-             <p className="text-slate-400 text-xs uppercase font-bold mb-1">Price</p>
+             <p className="text-slate-400 text-xs uppercase font-bold mb-1">Starting Price</p>
              <p className="text-2xl font-bold text-white">{PRICE}</p>
            </div>
         </div>
@@ -259,8 +269,8 @@ export default function App() {
             <div className="flex-none w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">1</div>
             <div className="flex-1 space-y-3">
                <div>
-                 <h3 className="font-bold text-slate-900">Email Details</h3>
-                 <p className="text-xs text-slate-500">Send photo & address to:</p>
+                 <h3 className="font-bold text-slate-900">Email Us The Photo</h3>
+                 <p className="text-xs text-slate-500">Send the photo you want turned into a 3D model:</p>
                </div>
                <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200 justify-between group">
                   <span className="font-mono text-sm text-slate-700 truncate">{EMAIL}</span>
@@ -269,7 +279,7 @@ export default function App() {
                   </button>
                </div>
                <a 
-                  href={`mailto:${EMAIL}?subject=PhotoSculpt Order&body=Hi PhotoSculpt Team,%0D%0A%0D%0AI would like to order a 3D print!%0D%0A%0D%0A--- ORDER DETAILS ---%0D%0A%0D%0A[Please attach your photo to this email]%0D%0A%0D%0ASHIPPING ADDRESS:%0D%0AName:%20%0D%0AStreet:%20%0D%0ACity/State/Zip:%20%0D%0A%0D%0AVENMO HANDLE (for confirmation):%20`}
+                  href={`mailto:${EMAIL}?subject=PhotoSculpt Order&body=Hi PhotoSculpt Team,%0D%0A%0D%0AI want to turn my attached photo into a 3D figurine!%0D%0A%0D%0A--- ORDER DETAILS ---%0D%0A%0D%0A[Attach Photo Here]%0D%0A%0D%0ASHIPPING ADDRESS:%0D%0AName:%20%0D%0AStreet:%20%0D%0ACity/State/Zip:%20%0D%0A%0D%0AVENMO HANDLE (for confirmation):%20`}
                   className="inline-flex items-center text-xs font-bold text-indigo-600 hover:underline"
                >
                  Draft Email for me <ArrowRight className="w-3 h-3 ml-1" />
@@ -283,7 +293,7 @@ export default function App() {
             <div className="flex-1 space-y-3">
                <div>
                  <h3 className="font-bold text-slate-900">Send Payment</h3>
-                 <p className="text-xs text-slate-500">Venmo <strong>{PRICE}</strong> to confirm:</p>
+                 <p className="text-xs text-slate-500">Venmo <strong>{PRICE}</strong> to confirm your order:</p>
                </div>
                <div className="flex items-center gap-2 bg-blue-50 p-2 rounded-lg border border-blue-100 justify-between">
                   <span className="font-mono text-sm text-blue-800 font-bold">{VENMO_HANDLE}</span>
@@ -308,11 +318,11 @@ export default function App() {
       {/* --- COMPACT HEADER --- */}
       <header className="flex-none h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 flex items-center justify-between z-50">
         <div 
-          className="flex items-center gap-2 cursor-pointer group" 
+          className="flex items-center gap-3 cursor-pointer group" 
           onClick={() => setActiveTab('HOME')}
         >
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-indigo-200">
-            <Printer className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 text-indigo-600 transform group-hover:rotate-6 transition-transform duration-300">
+             <DoodleCubeIcon />
           </div>
           <span className="text-lg font-extrabold tracking-tight text-slate-900 hidden md:inline">
             Photo<span className="text-indigo-600">Sculpt</span>
@@ -336,7 +346,7 @@ export default function App() {
            ))}
         </nav>
 
-        {/* Simple External Link or Placeholder */}
+        {/* Spacer for visual balance */}
         <div className="w-8 hidden md:block"></div>
       </header>
 
