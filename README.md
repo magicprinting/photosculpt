@@ -2,136 +2,153 @@
 
 Turn your photos into tangible 3D printed art. A service by Magic Printing.
 
-## 🚀 Development Setup
+---
 
-This project is a React application using TypeScript and Tailwind CSS. To develop locally, we recommend using **Vite**.
+## 💻 Local Development
+
+This project is a React application using TypeScript and Vite.
 
 ### 1. Prerequisites
+*   **Node.js** (v18 or newer)
+*   **Git**
+*   Code Editor (e.g., VS Code)
 
-*   **Node.js** (v18 or newer) installed on your computer.
-*   **Git** installed.
-*   A code editor like **VS Code**.
-
-### 2. Initializing the Project
-
-Open your terminal and run the following commands to scaffold a new project:
+### 2. Installation
+Run these commands in your terminal:
 
 ```bash
-# Create a new Vite project with React and TypeScript
-npm create vite@latest photo-sculpt -- --template react-ts
-
-# Navigate into the project directory
-cd photo-sculpt
-
-# Install standard dependencies
+# 1. Install dependencies
 npm install
 
-# Install project specific libraries
+# 2. Install specific packages for this app
 npm install lucide-react @google/genai
 ```
 
-### 3. Setting up Tailwind CSS
-
-Since the code uses Tailwind utility classes, you need to set it up:
-
-```bash
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
+### 3. Environment Variables
+Create a `.env` file in the root directory:
+```
+VITE_API_KEY=your_google_gemini_api_key_here
 ```
 
-Update `tailwind.config.js` to look like this:
-
-```javascript
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-```
-
-Add the Tailwind directives to the top of `src/index.css`:
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-### 4. Migrating the Files
-
-Move the files provided in this codebase into your new local `src` folder:
-
-*   `App.tsx` -> `src/App.tsx`
-*   `types.ts` -> `src/types.ts`
-*   `services/` -> `src/services/`
-*   `components/` -> `src/components/`
-
-*Note: You may need to remove the `importmap` script from `index.html` and ensure imports in files point to the installed node modules.*
-
-### 5. Environment Variables (API Key)
-
-Create a file named `.env` in the root directory (next to `package.json`) to store your Gemini API key.
-
-If using Vite, variables must start with `VITE_`:
-
-```
-VITE_API_KEY=your_actual_api_key_here
-```
-
-**Important Code Update for Local Dev:**
-In `src/services/geminiService.ts`, update the API key line to use Vite's env object:
-
-```typescript
-// Change this:
-// const API_KEY = process.env.API_KEY || '';
-
-// To this:
-const API_KEY = import.meta.env.VITE_API_KEY || '';
-```
-
-### 6. Running Locally
-
+### 4. Start the App
 ```bash
 npm run dev
 ```
-
-Open your browser to the local URL provided (usually `http://localhost:5173`).
+Open the local URL shown (usually `http://localhost:5173`).
 
 ---
 
-## 📦 Publishing to GitHub
+## 🚀 Deploying a React App to GitHub Pages
 
-1.  **Create a Repository**: Go to [GitHub.com](https://github.com) and create a new empty repository named `photo-sculpt`.
+Below is a comprehensive guide to deploying this app to GitHub Pages.
 
-2.  **Initialize Git locally**:
-    ```bash
-    git init
-    git add .
-    git commit -m "Initial commit"
-    ```
+### Prerequisites
+*   Node and npm are installed.
+*   Git is installed.
+*   A GitHub account.
 
-3.  **Link and Push**:
-    Replace `YOUR_USERNAME` with your GitHub username.
-    ```bash
-    git remote add origin https://github.com/YOUR_USERNAME/photo-sculpt.git
-    git branch -M main
-    git push -u origin main
-    ```
+### Procedure
 
-## 🌐 Deployment
+#### 1. Create an empty repository on GitHub
+1.  Sign into your GitHub account.
+2.  Create a new repository (e.g., named `photo-sculpt`).
+3.  Select **Public**.
+4.  **Important:** Leave "Initialize this repository with a README" **unchecked**.
 
-The easiest way to deploy this app for free is using **Vercel** or **Netlify**.
+#### 2. Set up the Project
+Since you already have the source code, ensure you are in the project root folder in your terminal.
 
-1.  Go to [Vercel.com](https://vercel.com) and sign up/login with GitHub.
-2.  Click "Add New Project".
-3.  Select your `photo-sculpt` repository.
-4.  **Important**: In the Environment Variables section of the deployment settings, add your `VITE_API_KEY` with your actual Gemini API Key.
-5.  Click **Deploy**.
+#### 3. Install the `gh-pages` package
+Install the package that handles the deployment logic:
 
-Your friend can now access the app via the URL Vercel provides!
+```bash
+npm install gh-pages --save-dev
+```
+
+#### 4. Configure `vite.config.ts` (Important for Vite)
+When hosting on GitHub Pages at a URL like `username.github.io/repo-name`, you must set the base path.
+Create or update `vite.config.ts` in your project root:
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  // REPLACE 'repo-name' WITH YOUR ACTUAL GITHUB REPOSITORY NAME
+  base: '/repo-name/', 
+})
+```
+
+#### 5. Add a `homepage` property to `package.json`
+Open `package.json` and add the `homepage` field. 
+
+Format: `https://{username}.github.io/{repo-name}`
+
+```json
+{
+  "name": "photo-sculpt",
+  "version": "0.0.0",
+  "homepage": "https://yourusername.github.io/photo-sculpt",
+  ...
+}
+```
+
+#### 6. Add deployment scripts to `package.json`
+In `package.json`, update the `scripts` section.
+
+**Note:** Unlike standard React apps that build to a `build` folder, Vite builds to a `dist` folder. We must tell `gh-pages` to deploy the `dist` folder.
+
+```json
+"scripts": {
+  "dev": "vite",
+  "build": "tsc && vite build",
+  "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+  "preview": "vite preview",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+},
+```
+
+#### 7. Add a "remote" that points to the GitHub repository
+Link your local files to the empty repository you created in Step 1.
+
+```bash
+# Initialize git if you haven't already
+git init
+git add .
+git commit -m "Initial commit"
+
+# Link to GitHub (Replace placeholders with your info)
+git remote add origin https://github.com/YOUR_USERNAME/photo-sculpt.git
+```
+
+#### 8. Deploy the React app
+Run the deploy command:
+
+```bash
+npm run deploy
+```
+
+**What happens here:**
+1.  `predeploy` runs: Vite builds your app into the `dist` folder.
+2.  `deploy` runs: `gh-pages` takes that `dist` folder and pushes it to a special branch named `gh-pages` on your GitHub repo.
+
+#### 9. Configure GitHub Pages Settings
+1.  Go to your repository on GitHub.
+2.  Click **Settings** tab.
+3.  Click **Pages** in the left sidebar.
+4.  Under **Build and deployment** > **Branch**:
+    *   Select `gh-pages`
+    *   Select `/ (root)`
+5.  Click **Save**.
+
+Your app should now be live at the URL shown at the top of that page!
+
+#### 10. Store your Source Code (Optional but Recommended)
+The step above only pushed the *built* website. To save your actual source code (React files) to GitHub:
+
+```bash
+git push -u origin main
+```
